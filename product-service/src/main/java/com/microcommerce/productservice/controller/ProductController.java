@@ -35,8 +35,13 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/category/{categoryId}")
-    public List<Product> getProductsByCategory(@PathVariable Long categoryId) {
-        return productService.getProductsByCategory(categoryId);
+    @GetMapping("/{id}/price")
+    public BigDecimal getProductPrice(@PathVariable Long id) {
+        return productService.getProductById(id).getPrice();
+    }
+
+    @GetMapping("/{id}/stock")
+    public Integer getProductStock(@PathVariable Long id) {
+        return productService.getProductById(id).getStockLevel();
     }
 }
