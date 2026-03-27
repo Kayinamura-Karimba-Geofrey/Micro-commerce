@@ -79,6 +79,8 @@ services:
       - postgres
       - discovery-server
       - kafka
+      - redis
+      - zipkin
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.0
@@ -102,6 +104,18 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+  redis:
+    image: redis:7.0-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
 
 volumes:
   postgres_data:

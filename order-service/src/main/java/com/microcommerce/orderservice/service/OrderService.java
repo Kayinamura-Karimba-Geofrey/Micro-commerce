@@ -3,6 +3,7 @@ package com.microcommerce.orderservice.service;
 import com.microcommerce.orderservice.client.ProductClient;
 import com.microcommerce.orderservice.model.Order;
 import com.microcommerce.orderservice.repository.OrderRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class OrderService {
     private final ProductClient productClient;
     private final KafkaProducerService kafkaProducerService;
 
+    @CircuitBreaker(name = "productService", fallbackMethod = "placeOrderFallback")
     public Order placeOrder(Order order) {
         // Simple validation and calculation
         BigDecimal total = BigDecimal.ZERO;
@@ -39,6 +41,11 @@ public class OrderService {
         ));
 
         return savedOrder;
+    }
+
+    public Order placeOrderFallback(Order order, Exception e) {
+        order.setStatus("FAILED - PRODUCT SERVICE DOWN");
+        return order;
     }
 
     public Order getOrderById(Long id) {
