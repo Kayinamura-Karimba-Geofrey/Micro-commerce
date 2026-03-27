@@ -1,0 +1,9 @@
+com\microcommerce\productservice\ProductServiceApplication.class
+com\microcommerce\productservice\model\Category$CategoryBuilder.class
+com\microcommerce\productservice\service\ProductService.class
+com\microcommerce\productservice\controller\ProductController.class
+com\microcommerce\productservice\model\Product$ProductBuilder.class
+com\microcommerce\productservice\model\Product.class
+com\microcommerce\productservice\repository\CategoryRepository.class
+com\microcommerce\productservice\repository\ProductRepository.class
+com\microcommerce\productservice\model\Category.class

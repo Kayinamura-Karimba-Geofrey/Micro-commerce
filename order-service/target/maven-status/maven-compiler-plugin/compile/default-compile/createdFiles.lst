@@ -1,0 +1,9 @@
+com\microcommerce\orderservice\repository\OrderRepository.class
+com\microcommerce\orderservice\model\Order$OrderBuilder.class
+com\microcommerce\orderservice\controller\OrderController.class
+com\microcommerce\orderservice\client\ProductClient.class
+com\microcommerce\orderservice\OrderServiceApplication.class
+com\microcommerce\orderservice\service\OrderService.class
+com\microcommerce\orderservice\model\OrderItem$OrderItemBuilder.class
+com\microcommerce\orderservice\model\Order.class
+com\microcommerce\orderservice\model\OrderItem.class
