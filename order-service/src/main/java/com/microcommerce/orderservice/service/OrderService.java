@@ -15,6 +15,7 @@ import java.util.UUID;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductClient productClient;
+    private final KafkaProducerService kafkaProducerService;
 
     public Order placeOrder(Order order) {
         // Simple validation and calculation
@@ -28,7 +29,16 @@ public class OrderService {
         order.setOrderNumber(UUID.randomUUID().toString());
         order.setStatus("PLACED");
         order.setCreatedAt(LocalDateTime.now());
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+        
+        // Publish event to Kafka
+        kafkaProducerService.sendOrderPlacedEvent(new OrderPlacedEvent(
+            savedOrder.getOrderNumber(),
+            "customer@example.com", // Mock email for now
+            savedOrder.getTotalAmount()
+        ));
+
+        return savedOrder;
     }
 
     public Order getOrderById(Long id) {
