@@ -1,12 +1,6 @@
-package com.microcommerce.productservice.controller;
-
-import com.microcommerce.productservice.model.Product;
-import com.microcommerce.productservice.service.ProductService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/products")

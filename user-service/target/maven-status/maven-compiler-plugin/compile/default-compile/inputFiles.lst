@@ -1,0 +1,13 @@
+D:\Micro-Commerce\user-service\src\main\java\com\microcommerce\userservice\dto\RegisterRequest.java
+D:\Micro-Commerce\user-service\src\main\java\com\microcommerce\userservice\dto\AuthenticationResponse.java
+D:\Micro-Commerce\user-service\src\main\java\com\microcommerce\userservice\service\AuthenticationService.java
+D:\Micro-Commerce\user-service\src\main\java\com\microcommerce\userservice\config\SecurityConfiguration.java
+D:\Micro-Commerce\user-service\src\main\java\com\microcommerce\userservice\controller\AuthenticationController.java
+D:\Micro-Commerce\user-service\src\main\java\com\microcommerce\userservice\config\JwtAuthenticationFilter.java
+D:\Micro-Commerce\user-service\src\main\java\com\microcommerce\userservice\UserServiceApplication.java
+D:\Micro-Commerce\user-service\src\main\java\com\microcommerce\userservice\service\JwtService.java
+D:\Micro-Commerce\user-service\src\main\java\com\microcommerce\userservice\dto\AuthenticationRequest.java
+D:\Micro-Commerce\user-service\src\main\java\com\microcommerce\userservice\config\ApplicationConfig.java
+D:\Micro-Commerce\user-service\src\main\java\com\microcommerce\userservice\repository\UserRepository.java
+D:\Micro-Commerce\user-service\src\main\java\com\microcommerce\userservice\model\Role.java
+D:\Micro-Commerce\user-service\src\main\java\com\microcommerce\userservice\model\User.java
