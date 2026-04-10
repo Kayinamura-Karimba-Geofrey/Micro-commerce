@@ -1,6 +1,7 @@
 package com.microcommerce.orderservice.service;
 
 import com.microcommerce.orderservice.client.ProductClient;
+import com.microcommerce.orderservice.event.OrderPlacedEvent;
 import com.microcommerce.orderservice.model.Order;
 import com.microcommerce.orderservice.repository.OrderRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;

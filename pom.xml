@@ -14,8 +14,7 @@
     <packaging>pom</packaging>
     <name>micro-commerce</name>
     <description>Microservices E-commerce Platform</description>
-
-    <modules>
+                        <modules>
         <module>discovery-server</module>
         <module>api-gateway</module>
         <module>user-service</module>
@@ -24,12 +23,10 @@
         <module>payment-service</module>
         <module>config-server</module>
     </modules>
-
     <properties>
         <java.version>21</java.version>
         <spring-cloud.version>2023.0.1</spring-cloud.version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -37,7 +34,6 @@
             <optional>true</optional>
         </dependency>
     </dependencies>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -49,20 +45,11 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
             </plugin>
         </plugins>
     </build>

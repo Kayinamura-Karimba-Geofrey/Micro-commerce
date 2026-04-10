@@ -17,7 +17,7 @@ public class PaymentService {
         // Mocking payment processing
         payment.setTransactionId(UUID.randomUUID().toString());
         payment.setStatus("SUCCESS");
-        payment.setPaymentDate(LocalDateTime.now());
+        payment.setCreatedAt(LocalDateTime.now());
         return paymentRepository.save(payment);
     }
 

@@ -25,5 +25,5 @@ public class Payment {
 
     private String transactionId;
 
-    private LocalDateTime paymentDate;
+    private LocalDateTime createdAt;
 }
