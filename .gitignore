@@ -19,6 +19,11 @@ bin/
 .gitignore
 
 
+*.bat
+*.cmd
+*.ps1
+config.bat
+
 # Security & Hardening rules
 *.bat
 *.cmd
