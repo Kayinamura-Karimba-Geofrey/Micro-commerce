@@ -4,5 +4,5 @@ CREATE TABLE payments (
     amount DECIMAL(19, 2),
     status VARCHAR(50),
     transaction_id VARCHAR(255),
-    payment_date TIMESTAMP
+    created_at TIMESTAMP
 );

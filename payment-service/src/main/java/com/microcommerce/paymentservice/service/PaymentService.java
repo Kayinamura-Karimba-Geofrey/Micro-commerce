@@ -22,10 +22,7 @@ public class PaymentService {
     }
 
     public Payment getPaymentByOrderId(Long orderId) {
-        // Simple mock search
-        return paymentRepository.findAll().stream()
-                .filter(p -> p.getOrderId().equals(orderId))
-                .findFirst()
+        return paymentRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new RuntimeException("Payment not found"));
     }
 }

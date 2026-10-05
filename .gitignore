@@ -16,7 +16,4 @@ bin/
 *.war
 *.ear
 /out/
-.gitignore
-
-
-
+.env

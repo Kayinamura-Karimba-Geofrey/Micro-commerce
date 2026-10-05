@@ -36,8 +36,9 @@ public class OrderService {
         
         // Publish event to Kafka
         kafkaProducerService.sendOrderPlacedEvent(new OrderPlacedEvent(
+            savedOrder.getId(),
             savedOrder.getOrderNumber(),
-            "customer@example.com", // Mock email for now
+            "customer@example.com", // TODO: derive from the authenticated user
             savedOrder.getTotalAmount()
         ));
 

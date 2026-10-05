@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderPlacedEvent {
+    // Must mirror com.microcommerce.orderservice.event.OrderPlacedEvent.
+    private Long orderId;
     private String orderNumber;
     private String customerEmail;
     private BigDecimal totalAmount;
