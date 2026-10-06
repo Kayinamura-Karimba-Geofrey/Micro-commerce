@@ -14,8 +14,7 @@ public class RouteValidator {
     // while the real endpoints live under /api/v1/auth.
     public static final List<String> openApiEndpoints = List.of(
             "/api/v1/auth/register",
-            "/api/v1/auth/authenticate",
-            "/eureka"
+            "/api/v1/auth/authenticate"
     );
 
     public Predicate<ServerHttpRequest> isSecured =
