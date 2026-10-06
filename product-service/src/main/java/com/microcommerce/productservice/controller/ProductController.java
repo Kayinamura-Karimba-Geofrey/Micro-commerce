@@ -27,6 +27,8 @@ public class ProductController {
 
     @PostMapping
     public Product createProduct(@RequestBody Product product) {
+        // Always create: a client-supplied id would otherwise overwrite an existing product.
+        product.setId(null);
         return productService.saveProduct(product);
     }
 
