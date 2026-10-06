@@ -12,6 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -28,15 +30,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.CUSTOMER)
                 .build();
-        repository.save(user);
-        var jwtToken = jwtService.generateToken(org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
-                .password(user.getPassword())
-                .roles(user.getRole().name())
-                .build());
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        return buildResponse(repository.save(user));
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -48,7 +42,17 @@ public class AuthenticationService {
         );
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(org.springframework.security.core.userdetails.User.builder()
+        return buildResponse(user);
+    }
+
+    private AuthenticationResponse buildResponse(User user) {
+        // uid and role are read by the API gateway and forwarded to the
+        // downstream services for ownership and admin checks.
+        Map<String, Object> claims = Map.of(
+                "uid", user.getId(),
+                "role", user.getRole().name()
+        );
+        var jwtToken = jwtService.generateToken(claims, org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())
                 .password(user.getPassword())
                 .roles(user.getRole().name())
