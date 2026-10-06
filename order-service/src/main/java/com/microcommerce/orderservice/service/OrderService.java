@@ -3,13 +3,18 @@ package com.microcommerce.orderservice.service;
 import com.microcommerce.orderservice.client.ProductClient;
 import com.microcommerce.orderservice.event.OrderPlacedEvent;
 import com.microcommerce.orderservice.model.Order;
+import com.microcommerce.orderservice.model.OrderItem;
 import com.microcommerce.orderservice.repository.OrderRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,37 +25,54 @@ public class OrderService {
     private final KafkaProducerService kafkaProducerService;
 
     @CircuitBreaker(name = "productService", fallbackMethod = "placeOrderFallback")
-    public Order placeOrder(Order order) {
-        // Simple validation and calculation
+    public Order placeOrder(Order request, Long userId, String userEmail) {
+        // Build a fresh order from the client's product ids and quantities only.
+        // Copying the request entity as-is would let clients set the id (and
+        // overwrite another order), the owner, the status or the item prices.
         BigDecimal total = BigDecimal.ZERO;
-        for (var item : order.getOrderItems()) {
-            BigDecimal price = productClient.getProductPrice(item.getProductId());
-            item.setPrice(price);
-            total = total.add(price.multiply(BigDecimal.valueOf(item.getQuantity())));
+        List<OrderItem> items = new ArrayList<>();
+        for (var requested : request.getOrderItems()) {
+            BigDecimal price = productClient.getProductPrice(requested.getProductId());
+            items.add(OrderItem.builder()
+                    .productId(requested.getProductId())
+                    .quantity(requested.getQuantity())
+                    .price(price)
+                    .build());
+            total = total.add(price.multiply(BigDecimal.valueOf(requested.getQuantity())));
         }
-        order.setTotalAmount(total);
-        order.setOrderNumber(UUID.randomUUID().toString());
-        order.setStatus("PLACED");
-        order.setCreatedAt(LocalDateTime.now());
+        Order order = Order.builder()
+                .orderItems(items)
+                .userId(userId)
+                .totalAmount(total)
+                .orderNumber(UUID.randomUUID().toString())
+                .status("PLACED")
+                .createdAt(LocalDateTime.now())
+                .build();
         Order savedOrder = orderRepository.save(order);
         
         // Publish event to Kafka
         kafkaProducerService.sendOrderPlacedEvent(new OrderPlacedEvent(
             savedOrder.getId(),
+            savedOrder.getUserId(),
             savedOrder.getOrderNumber(),
-            "customer@example.com", // TODO: derive from the authenticated user
+            userEmail,
             savedOrder.getTotalAmount()
         ));
 
         return savedOrder;
     }
 
-    public Order placeOrderFallback(Order order, Exception e) {
-        order.setStatus("FAILED - PRODUCT SERVICE DOWN");
-        return order;
+    public Order placeOrderFallback(Order request, Long userId, String userEmail, Exception e) {
+        return Order.builder()
+                .userId(userId)
+                .status("FAILED - PRODUCT SERVICE DOWN")
+                .build();
     }
 
-    public Order getOrderById(Long id) {
-        return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+    public Order getOrderById(Long id, Long userId, boolean admin) {
+        // Respond 404 for other users' orders so ids cannot be probed.
+        return orderRepository.findById(id)
+                .filter(order -> admin || userId.equals(order.getUserId()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
     }
 }

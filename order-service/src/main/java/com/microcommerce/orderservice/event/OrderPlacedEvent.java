@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 public class OrderPlacedEvent {
     // Internal order id so downstream services can link payments to the order.
     private Long orderId;
+    private Long userId;
     private String orderNumber;
     private String customerEmail;
     private BigDecimal totalAmount;

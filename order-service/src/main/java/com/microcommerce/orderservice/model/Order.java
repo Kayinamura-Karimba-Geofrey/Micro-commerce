@@ -1,6 +1,9 @@
 package com.microcommerce.orderservice.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -22,7 +25,9 @@ public class Order {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
-    private List<OrderItem> orderItems;
+    @NotEmpty
+    @Size(max = 100)
+    private List<@Valid OrderItem> orderItems;
 
     private Long userId;
 
