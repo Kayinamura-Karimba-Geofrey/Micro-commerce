@@ -17,3 +17,8 @@ bin/
 *.ear
 /out/
 .env
+.vscode/
+# Locally downloaded toolchains / Maven repository
+.m2repo/
+apache-maven-*/
+jdk-*/
