@@ -24,6 +24,7 @@ public class KafkaConsumerService {
         // Auto-create a pending payment record for the new order
         Payment payment = new Payment();
         payment.setOrderId(event.getOrderId());
+        payment.setUserId(event.getUserId());
         payment.setTransactionId(UUID.randomUUID().toString());
         payment.setAmount(event.getTotalAmount());
         payment.setStatus("PENDING");

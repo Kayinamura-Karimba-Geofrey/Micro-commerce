@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 public class OrderPlacedEvent {
     // Must mirror com.microcommerce.orderservice.event.OrderPlacedEvent.
     private Long orderId;
+    private Long userId;
     private String orderNumber;
     private String customerEmail;
     private BigDecimal totalAmount;

@@ -19,6 +19,8 @@ public class Payment {
 
     private Long orderId;
 
+    private Long userId;
+
     private BigDecimal amount;
 
     private String status;
