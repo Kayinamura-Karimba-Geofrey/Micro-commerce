@@ -5,6 +5,7 @@ import com.microcommerce.paymentservice.model.Payment;
 import com.microcommerce.paymentservice.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,13 @@ public class KafkaConsumerService {
     @KafkaListener(topics = "order-placed", groupId = "payment-group")
     public void handleOrderPlacedEvent(OrderPlacedEvent event) {
         log.info("Received OrderPlacedEvent: {}", event);
-        
+
+        // Kafka can redeliver an event; there must only ever be one payment per order.
+        if (paymentRepository.existsByOrderId(event.getOrderId())) {
+            log.info("Payment for order {} already exists, ignoring duplicate event", event.getOrderNumber());
+            return;
+        }
+
         // Auto-create a pending payment record for the new order
         Payment payment = new Payment();
         payment.setOrderId(event.getOrderId());
@@ -29,8 +36,14 @@ public class KafkaConsumerService {
         payment.setAmount(event.getTotalAmount());
         payment.setStatus("PENDING");
         payment.setCreatedAt(LocalDateTime.now());
-        
-        paymentRepository.save(payment);
+
+        try {
+            paymentRepository.save(payment);
+        } catch (DataIntegrityViolationException e) {
+            // A concurrent delivery won the race on the unique order_id index.
+            log.info("Payment for order {} already exists, ignoring duplicate event", event.getOrderNumber());
+            return;
+        }
         log.info("Created pending payment for order: {}", event.getOrderNumber());
     }
 }
