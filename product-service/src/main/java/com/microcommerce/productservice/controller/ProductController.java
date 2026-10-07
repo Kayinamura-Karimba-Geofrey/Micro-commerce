@@ -1,7 +1,9 @@
 package com.microcommerce.productservice.controller;
 
+import com.microcommerce.productservice.dto.StockRequest;
 import com.microcommerce.productservice.model.Product;
 import com.microcommerce.productservice.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +28,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
+    public Product createProduct(@Valid @RequestBody Product product) {
         // Always create: a client-supplied id would otherwise overwrite an existing product.
         product.setId(null);
         return productService.saveProduct(product);
@@ -46,5 +48,17 @@ public class ProductController {
     @GetMapping("/{id}/stock")
     public Integer getProductStock(@PathVariable Long id) {
         return productService.getProductById(id).getStockLevel();
+    }
+
+    // Called by order-service. Through the gateway these POSTs require the ADMIN role.
+    @PostMapping("/{id}/reserve")
+    public BigDecimal reserveStock(@PathVariable Long id, @Valid @RequestBody StockRequest request) {
+        return productService.reserveStock(id, request.quantity());
+    }
+
+    @PostMapping("/{id}/release")
+    public ResponseEntity<Void> releaseStock(@PathVariable Long id, @Valid @RequestBody StockRequest request) {
+        productService.releaseStock(id, request.quantity());
+        return ResponseEntity.noContent().build();
     }
 }
