@@ -1,7 +1,7 @@
 package com.microcommerce.orderservice.service;
 
 import com.microcommerce.orderservice.client.ProductClient;
-import com.microcommerce.orderservice.event.OrderPlacedEvent;
+import com.microcommerce.common.event.OrderPlacedEvent;
 import com.microcommerce.orderservice.model.Order;
 import com.microcommerce.orderservice.model.OrderItem;
 import com.microcommerce.orderservice.repository.OrderRepository;

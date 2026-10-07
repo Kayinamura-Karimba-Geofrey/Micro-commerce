@@ -1,4 +1,4 @@
-package com.microcommerce.orderservice.event;
+package com.microcommerce.common.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/** Published by order-service on the "order-placed" topic, consumed by payment-service. */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

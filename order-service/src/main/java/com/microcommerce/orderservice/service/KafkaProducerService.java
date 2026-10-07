@@ -1,6 +1,6 @@
 package com.microcommerce.orderservice.service;
 
-import com.microcommerce.orderservice.event.OrderPlacedEvent;
+import com.microcommerce.common.event.OrderPlacedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

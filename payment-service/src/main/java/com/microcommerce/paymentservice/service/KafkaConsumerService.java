@@ -1,6 +1,6 @@
 package com.microcommerce.paymentservice.service;
 
-import com.microcommerce.paymentservice.event.OrderPlacedEvent;
+import com.microcommerce.common.event.OrderPlacedEvent;
 import com.microcommerce.paymentservice.model.Payment;
 import com.microcommerce.paymentservice.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
